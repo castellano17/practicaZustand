@@ -17,8 +17,8 @@ interface Actions {
 const storeAPI: StateCreator<PersonState & Actions> = (set) => ({
   firstName: "",
   lastName: "",
-  setFirstName: (value: string) => set((state) => ({ firstName: value })),
-  setLastName: (value: string) => set((state) => ({ lastName: value })),
+  setFirstName: (value: string) => set({ firstName: value }),
+  setLastName: (value: string) => set({ lastName: value }),
 });
 
 export const usePersonStore = create<PersonState & Actions>()(
