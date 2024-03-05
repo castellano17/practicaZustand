@@ -23,7 +23,7 @@ const storageApi: StateStorage = {
       // body: JSON.stringify(value),
     }).then((res) => res.json());
 
-    // console.log(data);
+    console.log(data);
     return;
   },
   removeItem: function (name: string): void | Promise<void> {
