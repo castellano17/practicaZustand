@@ -4,6 +4,9 @@ import {
 } from "react-icons/io5";
 import { Task, TaskStatus } from "../../interfaces";
 import { SingleTask } from "./SingleTask";
+import { DragEvent, useState } from "react";
+import { useTaskStore } from "../../stores/tasks/task.store";
+import classNames from "classnames";
 
 interface Props {
   title: string;
@@ -11,9 +14,39 @@ interface Props {
   value: TaskStatus;
 }
 
-export const JiraTasks = ({ title, tasks }: Props) => {
+export const JiraTasks = ({ title, value, tasks }: Props) => {
+  const [onDragOver, setOnDragOver] = useState(false);
+
+  const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+  const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setOnDragOver(true);
+  };
+  const handleLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setOnDragOver(false);
+  };
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setOnDragOver(false);
+    onTaskDrop(value);
+  };
+
   return (
-    <div className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]">
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleLeave}
+      onDrop={handleDrop}
+      className={classNames(
+        "!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]",
+        {
+          "border-blue-500 border-dotted": isDragging,
+          "border-green-500 border-dotted": onDragOver && isDragging,
+        }
+      )}
+    >
       {/* Task Header */}
       <div className="relative flex flex-row justify-between">
         <div className="flex items-center justify-center">
@@ -31,6 +64,15 @@ export const JiraTasks = ({ title, tasks }: Props) => {
         </button>
       </div>
 
+      {/* {onDragOver && (
+        <div
+          className={`bg-green-200 text-center py-2 px-4 rounded ${
+            onDragOver ? "visible" : "hidden"
+          }`}
+        >
+          Soltar aquí
+        </div>
+      )} */}
       {/* Task Items */}
       <div className="h-full w-full">
         {tasks.length > 0 ? (
