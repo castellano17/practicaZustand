@@ -11,7 +11,7 @@ interface Props {
   value: TaskStatus;
 }
 
-export const JiraTasks = ({ title, value, tasks }: Props) => {
+export const JiraTasks = ({ title, tasks }: Props) => {
   return (
     <div className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]">
       {/* Task Header */}
