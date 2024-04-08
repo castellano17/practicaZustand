@@ -2,6 +2,7 @@ import { type StateCreator, create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 //import { customSessionStore } from "../Storages/session.storage";
 import { firebaseStorage } from "../Storages/firebase.storage";
+import { logger } from "../middlewares/logger.middleware";
 
 interface PersonState {
   firstName: string;
@@ -23,11 +24,13 @@ const storeAPI: StateCreator<PersonState & Actions> = (set) => ({
 });
 
 export const usePersonStore = create<PersonState & Actions>()(
-  devtools(
-    persist(storeAPI, {
-      name: "person-store",
-      // storage: customSessionStore,
-      storage: firebaseStorage,
-    })
+  logger(
+    devtools(
+      persist(storeAPI, {
+        name: "person-store",
+        // storage: customSessionStore,
+        storage: firebaseStorage,
+      })
+    )
   )
 );
